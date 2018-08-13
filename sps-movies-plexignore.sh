@@ -50,16 +50,19 @@ do
 		if [ "${MKVEXISTS}" -eq 1 ]
 		then
 			echo "$(date "+%d.%m.%Y %H:%M:%S")" "---I--- : A MKV version of this movie exists : Yes - Adding the AVI filename in the .plexignore file"  >> $LOG
-			find . -type f -name "*.avi" >> "$DIRECTORY"/.plexignore 2>&1
+			find . -type f -name "*.avi" | cut -c 3- >> "$DIRECTORY"/.plexignore 2>&1
 		else
 			echo "$(date "+%d.%m.%Y %H:%M:%S")" "---I--- : A MKV version of this movie exists : No - .plexignore file not modified"  >> $LOG
 		fi
 	fi
 done
 
-echo "$(date "+%d.%m.%Y %H:%M:%S")" "---I--- : DIFF between the previous plexignore and the current :" >> $LOG
-diff "$DIRECTORY"/.plexignore.bak "$DIRECTORY"/.plexignore >> $LOG
-rm "$DIRECTORY"/.plexignore.bak
+if [ -e "$DIRECTORY"/.plexignore.bak ]
+then
+	echo "$(date "+%d.%m.%Y %H:%M:%S")" "---I--- : DIFF between the previous plexignore and the current :" >> $LOG
+	diff "$DIRECTORY"/.plexignore.bak "$DIRECTORY"/.plexignore >> $LOG
+	rm "$DIRECTORY"/.plexignore.bak
+fi
 
 #_____END__________________________________________________________________________________________
 
