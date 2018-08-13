@@ -11,7 +11,7 @@
 
 #_____VAR___________________________________________________________________________________________
 
-LOG="/root/cron/create_plex_ignore_movies.log"
+LOG="/volume1/Plex/cron/SynologyMoviePlexIgnore.log"
 DIRECTORY="/volume1/Films"
 
 #_____BEGIN_________________________________________________________________________________________
@@ -21,10 +21,15 @@ cd "$DIRECTORY"
 
 echo `date "+%d.%m.%Y %H:%M:%S"` "---I--- : ROOT Folder :" `pwd` >> $LOG
 
+if [ -e "$DIRECTORY"/\@eaDir ]
+then
+	rm -rf "$DIRECTORY"/\@eaDir
+fi
+
 if [ -e "$DIRECTORY"/.plexignore ]
 then
 	echo `date "+%d.%m.%Y %H:%M:%S"` "---I--- : .plexignore file existing & deleted" >> $LOG
-	rm "$DIRECTORY"/.plexignore
+	mv "$DIRECTORY"/.plexignore "$DIRECTORY"/.plexignore.bak
 else
 	echo `date "+%d.%m.%Y %H:%M:%S"` "---I--- : .plexignore file does not exist" >> $LOG
 fi
@@ -34,8 +39,8 @@ do
     cd "${D}"
     echo `date "+%d.%m.%Y %H:%M:%S"` "---I--- : Current folder :" `pwd` >> $LOG
  
-	AVIEXISTS=`ls *.avi | wc -l`
-	MKVEXISTS=`ls *.mkv | wc -l`
+	AVIEXISTS=`ls *.avi | wc -l 2>&1`
+	MKVEXISTS=`ls *.mkv | wc -l 2>&1`
 	if [ "${AVIEXISTS}" -eq 1 ]
 	then
 		echo `date "+%d.%m.%Y %H:%M:%S"` "---I--- : An AVI version of this movie exists : YES" >> $LOG
@@ -43,12 +48,16 @@ do
 		if [ "${MKVEXISTS}" -eq 1 ]
 		then
 			echo `date "+%d.%m.%Y %H:%M:%S"` "---I--- : A MKV version of this movie exists : Yes - Adding the AVI filename in the .plexignore file"  >> $LOG
-			ls *.avi >> "$DIRECTORY"/.plexignore
+			ls *.avi >> "$DIRECTORY"/.plexignore 2>&1
 		else
 			echo `date "+%d.%m.%Y %H:%M:%S"` "---I--- : A MKV version of this movie exists : No - .plexignore file not modified"  >> $LOG
 		fi
 	fi
 done
+
+echo `date "+%d.%m.%Y %H:%M:%S"` "---I--- : DIFF between the previous plexignore and the current :" >> $LOG
+diff "$DIRECTORY"/.plexignore.bak "$DIRECTORY"/.plexignore >> $LOG
+rm "$DIRECTORY"/.plexignore.bak
 
 #_____END__________________________________________________________________________________________
 
