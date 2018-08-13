@@ -38,8 +38,8 @@ fi
 
 for D in "$DIRECTORY"/*/
 do
-    cd "${D}" || exit
-    echo "$(date "+%d.%m.%Y %H:%M:%S")" "---I--- : Current folder :" "$(pwd)" >> $LOG
+	cd "${D}" || exit
+	echo "$(date "+%d.%m.%Y %H:%M:%S")" "---I--- : Current folder :" "$(pwd)" >> $LOG
  
 	AVIEXISTS=$(find . -type f -name "*.avi" | wc -l 2>&1)
 	MKVEXISTS=$(find . -type f -name "*.mkv" | wc -l 2>&1)
