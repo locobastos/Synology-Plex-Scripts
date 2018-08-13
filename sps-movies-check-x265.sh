@@ -30,6 +30,15 @@ for D in "$DIRECTORY"/*/
 do
 	cd "${D}" || exit
 	echo "$(date "+%d.%m.%Y %H:%M:%S")" "---I--- : Current folder :" "$(pwd)" >> $LOG
+	
+	# Complete Name
+	# /usr/local/mediainfo/bin/mediainfo --Inform="General;%CompleteName% /volume1/Films/a.mkv
+	
+	# Video Codec ID
+	# /usr/local/mediainfo/bin/mediainfo --Inform="Video;%CodecID% /volume1/Films/a.mkv
+	
+	# Video Writting Library
+	# /usr/local/mediainfo/bin/mediainfo --Inform="Video;%Encoded_Library% /volume1/Films/a.mkv
 done
 
 #_____END__________________________________________________________________________________________
