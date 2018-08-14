@@ -31,14 +31,18 @@ do
 	cd "${D}" || exit
 	echo "$(date "+%d.%m.%Y %H:%M:%S")" "---I--- : Current folder :" "$(pwd)" >> $LOG
 	
-	# Complete Name
-	# /usr/local/mediainfo/bin/mediainfo --Inform="General;%CompleteName% /volume1/Films/a.mkv
-	
-	# Video Codec ID
-	# /usr/local/mediainfo/bin/mediainfo --Inform="Video;%CodecID% /volume1/Films/a.mkv
-	
-	# Video Writting Library
-	# /usr/local/mediainfo/bin/mediainfo --Inform="Video;%Encoded_Library% /volume1/Films/a.mkv
+	# Check if the directory @eaDir exists
+	if [ -e \@eaDir ]
+	then
+		rm -rf \@eaDir
+	fi
+
+	# Check each file
+	find . -type f \ 
+		-exec echo -n "$(date '+%d.%m.%Y %H:%M:%S')" "---I--- Checking : " \; \
+		-exec /usr/local/mediainfo/bin/mediainfo --Inform="General;%CompleteName%" {} \; \
+		-exec echo -n "$(date '+%d.%m.%Y %H:%M:%S')" "---I--- Codec ID : " \; \
+		-exec /usr/local/mediainfo/bin/mediainfo --Inform="Video;%CodecID%" {} \;
 done
 
 #_____END__________________________________________________________________________________________
