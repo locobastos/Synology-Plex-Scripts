@@ -23,10 +23,7 @@ cd "$DIRECTORY" || exit
 
 echo "$(date "+%d.%m.%Y %H:%M:%S")" "---I--- : ROOT Folder :" "$(pwd)" >> $LOG
 
-if [ -e "$DIRECTORY"/\@eaDir ]
-then
-	rm -rf "$DIRECTORY"/\@eaDir
-fi
+find . -type d -name "@eaDir" -exec rm -rf {} \;
 
 if [ -e "$DIRECTORY"/.plexignore ]
 then
