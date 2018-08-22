@@ -14,6 +14,7 @@
 #_____VAR___________________________________________________________________________________________
 
 LOG="/volume1/Plex/cron/sps-movies-plexignore.log"
+NOAVI="/volume1/Plex/cron/sps-movies-noavi.log"
 DIRECTORY="/volume1/Films"
 
 #_____BEGIN_________________________________________________________________________________________
@@ -51,6 +52,9 @@ do
 		else
 			echo "$(date "+%d.%m.%Y %H:%M:%S")" "---I--- : A MKV version of this movie exists : No - .plexignore file not modified"  >> $LOG
 		fi
+	else
+		echo "$(date "+%d.%m.%Y %H:%M:%S")" "---I--- : An AVI version of this movie exists : NO, adding the film name to alert log" >> $LOG
+		echo "$(date "+%d.%m.%Y %H:%M:%S")" "---E--- : This movie does not have AVI version : ${D}" >> $NOAVI
 	fi
 done
 
